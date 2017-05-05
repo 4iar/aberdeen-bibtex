@@ -390,24 +390,29 @@ FUNCTION {format.pages}
 }
 
 FUNCTION {format.vol.num.pages}
-{ "{\bfseries " volume "}" * * field.or.null
-  number empty$
+{
+    volume empty$
     'skip$
-    { "(" number * ")" * *
-      volume empty$
-        { "there's a number but no volume in " cite$ * warning$ }
+    { "{\bfseries " volume "}" * * field.or.null
+        number empty$
         'skip$
-      if$
+        { "(" number * ")" * *
+            volume empty$
+            { "there's a number but no volume in " cite$ * warning$ }
+            'skip$
+            if$
+        }
+        if$
+        pages empty$
+        'skip$
+        { duplicate$ empty$
+            { pop$ format.pages }
+            { ":" * pages n.dashify * }
+            if$
+        }
+        if$
     }
-  if$
-  pages empty$
-    'skip$
-    { duplicate$ empty$
-        { pop$ format.pages }
-        { ":" * pages n.dashify * }
-      if$
-    }
-  if$
+    if$
 }
 
 FUNCTION {format.chapter.pages}
